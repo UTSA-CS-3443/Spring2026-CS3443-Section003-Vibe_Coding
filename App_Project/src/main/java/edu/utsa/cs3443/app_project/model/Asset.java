@@ -1,4 +1,4 @@
-package edu.utsa.cs3443.app_project;
+package edu.utsa.cs3443.app_project.model;
 
 import java.time.LocalDate;
 public class Asset {
