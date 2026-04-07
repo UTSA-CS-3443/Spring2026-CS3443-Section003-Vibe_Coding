@@ -14,22 +14,39 @@ public class DataStore {
     public static void loadSampleData() {
         assets.addAll(
                 new Asset("Samsung Washer", "Appliance",
-                        LocalDate.of(2022, 3, 15), LocalDate.of(2025, 3, 15),
-                        "Good", "Front loader"),
+                        899.99, LocalDate.of(2022, 3, 15),
+                        LocalDate.of(2025, 3, 15), "Laundry Room",
+                        AssetStatus.ACTIVE, "Front loader"),
+
                 new Asset("HVAC Unit", "System",
-                        LocalDate.of(2019, 6, 1), LocalDate.of(2024, 6, 1),
-                        "Needs Maintenance", "Filter due"),
+                        3200.00, LocalDate.of(2019, 6, 1),
+                        LocalDate.of(2024, 6, 1), "Utility Room",
+                        AssetStatus.NEEDS_MAINTENANCE, "Filter due"),
+
                 new Asset("Lawn Mower", "Tool",
-                        LocalDate.of(2021, 4, 10), null, "Good", "No warranty")
+                        450.00, LocalDate.of(2021, 4, 10),
+                        null, "Garage",
+                        AssetStatus.ACTIVE, "No warranty")
         );
+
         reminders.addAll(
-                new Reminder("Replace HVAC filter", "Maintenance",
-                        LocalDate.now().minusDays(5)), // already overdue!
-                new Reminder("Check smoke detectors", "Inspection",
-                        LocalDate.now().plusDays(14)), // upcoming
-                new Reminder("Washer warranty expiry", "Warranty",
-                        LocalDate.of(2025, 3, 15))
+                new Reminder("Replace HVAC filter",
+                        ReminderType.MAINTENANCE,
+                        LocalDate.now().minusDays(5), "Overdue!"),
+
+                new Reminder("Check smoke detectors",
+                        ReminderType.INSPECTION,
+                        LocalDate.now().plusDays(4), "Check all floors"),
+
+                new Reminder("Washer warranty expiry",
+                        ReminderType.WARRANTY_EXPIRY,
+                        LocalDate.of(2025, 3, 15), "")
         );
+    }
+
+    // Add this new helper for the dashboard "due soon" badge
+    public static int getDueSoonCount() {
+        return (int) reminders.stream().filter(Reminder::isDueSoon).count();
     }
 
     public static int getOverdueCount() {

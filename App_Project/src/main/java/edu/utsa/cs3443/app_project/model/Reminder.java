@@ -1,16 +1,21 @@
 package edu.utsa.cs3443.app_project.model;
 
 import java.time.LocalDate;
+
 public class Reminder {
-    private String title; // e.g. "Replace HVAC filter"
-    private String type; // "Maintenance" | "Inspection" | "Warranty"
+
+    private String title;
+    private ReminderType type;    // CHANGED: was String, now enum
     private LocalDate dueDate;
+    private String notes;   // NEW from UML
     private boolean done;
 
-    public Reminder(String title, String type, LocalDate dueDate) {
+    public Reminder(String title, ReminderType type,
+                    LocalDate dueDate, String notes) {
         this.title = title;
         this.type = type;
         this.dueDate = dueDate;
+        this.notes = notes;
         this.done = false;
     }
 
@@ -18,12 +23,16 @@ public class Reminder {
         return title;
     }
 
-    public String getType() {
+    public ReminderType getType() {
         return type;
     }
 
     public LocalDate getDueDate() {
         return dueDate;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 
     public boolean isDone() {
@@ -36,5 +45,13 @@ public class Reminder {
 
     public boolean isOverdue() {
         return !done && dueDate.isBefore(LocalDate.now());
+    }
+
+    // NEW: due within the next 7 days (useful for dashboard warning)
+    public boolean isDueSoon() {
+        if (done) return false;
+        LocalDate today = LocalDate.now();
+        return !dueDate.isBefore(today) &&
+                dueDate.isBefore(today.plusDays(7));
     }
 }
