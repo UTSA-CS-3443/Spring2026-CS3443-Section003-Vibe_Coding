@@ -12,7 +12,7 @@ public class MainController {
     @FXML
     private AnchorPane contentArea;
 
-    // Nav buttons — fx:id must match these names in main.fxml
+    // Nav buttons — fx:id must match these names in Main.fxml
     @FXML
     private Button btnDashboard;
     @FXML

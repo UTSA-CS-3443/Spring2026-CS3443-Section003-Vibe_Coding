@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="edu.utsa.cs3443.HomeHaven.controller.MainController"
+            prefHeight="450.0" prefWidth="600.0">
+
+    <children>
+        <HBox spacing="10.0"
+              style="-fx-padding: 10;"
+              AnchorPane.topAnchor="0.0"
+              AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0">
+            <children>
+                <Button fx:id="btnDashboard" text="Dashboard" onAction="#showDashboard"/>
+                <Button fx:id="btnAssets" text="Assets" onAction="#showAssets"/>
+                <Button fx:id="btnReminders" text="Reminders" onAction="#showReminders"/>
+            </children>
+        </HBox>
+
+        <AnchorPane fx:id="contentArea"
+                    AnchorPane.topAnchor="50.0"
+                    AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0"/>
+    </children>
 
 </AnchorPane>

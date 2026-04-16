@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.utsa.cs3443.HomeHaven.controller.AssetsController"
+      prefHeight="400.0" prefWidth="600.0"
+      spacing="10.0"
+      style="-fx-padding: 20;">
 
-</AnchorPane>
+    <children>
+        <Label text="Assets" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+
+        <TableView fx:id="tblAssets" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colName" text="Name" prefWidth="130"/>
+                <TableColumn fx:id="colCategory" text="Category" prefWidth="90"/>
+                <TableColumn fx:id="colRoom" text="Room" prefWidth="90"/>
+                <TableColumn fx:id="colStatus" text="Status" prefWidth="110"/>
+                <TableColumn fx:id="colPrice" text="Price" prefWidth="80"/>
+                <TableColumn fx:id="colWarranty" text="Warranty Expiry" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </children>
+
+</VBox>
