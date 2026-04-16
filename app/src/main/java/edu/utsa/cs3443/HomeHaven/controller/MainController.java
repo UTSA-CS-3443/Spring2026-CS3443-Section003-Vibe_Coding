@@ -1,12 +1,11 @@
-package edu.utsa.cs3443.app_project.controller;
+package edu.utsa.cs3443.HomeHaven.controller;
 
-import edu.utsa.cs3443.app_project.model.DataStore;
+import edu.utsa.cs3443.HomeHaven.model.DataStore;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 
 public class MainController {
 
@@ -53,7 +52,7 @@ public class MainController {
     public void toggleDarkMode() {
         darkMode = !darkMode;
         String stylesheet = getClass().getResource(
-                "/edu/utsa/cs3443/app_project/" +
+                "/edu/utsa/cs3443/HomeHaven/" +
                         (darkMode ? "dark.css" : "light.css")
         ).toExternalForm();
 
@@ -68,7 +67,7 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource(
-                            "/edu/utsa/cs3443/app_project/" + name + ".fxml"
+                            "/edu/utsa/cs3443/HomeHaven/" + name + ".fxml"
                     )
             );
             Parent screen = loader.load();

@@ -1,6 +1,6 @@
-package edu.utsa.cs3443.app_project;
+package edu.utsa.cs3443.HomeHaven;
 
-import edu.utsa.cs3443.app_project.model.DataStore;
+import edu.utsa.cs3443.HomeHaven.model.DataStore;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,7 +13,7 @@ public class Main extends Application {
         DataStore.loadSampleData();  // load data before anything shows
 
         FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/edu/utsa/cs3443/app_project/main.fxml")
+                getClass().getResource("/edu/utsa/cs3443/HomeHaven/main.fxml")
         );
         Scene scene = new Scene(loader.load());
         stage.setTitle("HomeHaven");

@@ -1,4 +1,4 @@
-package edu.utsa.cs3443.app_project.model;
+package edu.utsa.cs3443.HomeHaven.model;
 
 import java.time.LocalDate;
 
