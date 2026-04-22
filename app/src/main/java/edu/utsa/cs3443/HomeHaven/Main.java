@@ -9,9 +9,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+        // 🔥 LOAD DATA FIRST
+        edu.utsa.cs3443.HomeHaven.model.DataStore.loadSampleData();
+
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/edu/utsa/cs3443/HomeHaven/Main.fxml")
         );
+
         Scene scene = new Scene(loader.load());
         stage.setTitle("HomeHaven");
         stage.setScene(scene);

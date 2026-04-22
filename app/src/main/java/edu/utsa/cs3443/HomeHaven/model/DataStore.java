@@ -12,6 +12,8 @@ public class DataStore {
 
     // Call once in Main.java before showing the window
     public static void loadSampleData() {
+        if (!assets.isEmpty()) return;
+
         assets.addAll(
                 new Asset("Samsung Washer", "Appliance",
                         899.99, LocalDate.of(2022, 3, 15),
@@ -56,4 +58,5 @@ public class DataStore {
     public static int getExpiredWarrantyCount() {
         return (int) assets.stream().filter(Asset::isWarrantyExpired).count();
     }
+
 }

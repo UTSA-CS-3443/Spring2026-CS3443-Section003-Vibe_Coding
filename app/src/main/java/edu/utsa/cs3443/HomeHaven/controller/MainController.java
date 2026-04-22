@@ -1,6 +1,5 @@
 package edu.utsa.cs3443.HomeHaven.controller;
 
-import edu.utsa.cs3443.HomeHaven.model.DataStore;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,6 @@ public class MainController {
     @FXML
     private AnchorPane contentArea;
 
-    // Nav buttons — fx:id must match these names in Main.fxml
     @FXML
     private Button btnDashboard;
     @FXML
@@ -20,12 +18,10 @@ public class MainController {
     @FXML
     private Button btnReminders;
 
-    // Dark mode toggle state
     private boolean darkMode = false;
 
     @FXML
     public void initialize() {
-        DataStore.loadSampleData(); // load data once here instead of Main.java
         loadScreen("dashboard");
         setActiveButton(btnDashboard);
     }
@@ -56,12 +52,9 @@ public class MainController {
                         (darkMode ? "dark.css" : "light.css")
         ).toExternalForm();
 
-        // Apply to the root scene so ALL screens get it
         contentArea.getScene().getStylesheets().clear();
         contentArea.getScene().getStylesheets().add(stylesheet);
     }
-
-    // ── Private helpers ──────────────────────────────────────────────
 
     private void loadScreen(String name) {
         try {
@@ -70,9 +63,15 @@ public class MainController {
                             "/edu/utsa/cs3443/HomeHaven/" + name + ".fxml"
                     )
             );
+
             Parent screen = loader.load();
 
-            // Stretch the loaded screen to fill contentArea
+            // 🔥 AUTO REFRESH DASHBOARD
+            Object controller = loader.getController();
+            if (controller instanceof DashboardController) {
+                ((DashboardController) controller).refresh();
+            }
+
             AnchorPane.setTopAnchor(screen, 0.0);
             AnchorPane.setBottomAnchor(screen, 0.0);
             AnchorPane.setLeftAnchor(screen, 0.0);
@@ -81,11 +80,10 @@ public class MainController {
             contentArea.getChildren().setAll(screen);
 
         } catch (Exception e) {
-            e.printStackTrace(); // check Run console if a screen won't load
+            e.printStackTrace();
         }
     }
 
-    // Highlights the active nav button so the user knows where they are
     private void setActiveButton(Button active) {
         for (Button btn : new Button[]{btnDashboard, btnAssets, btnReminders}) {
             btn.getStyleClass().remove("nav-active");

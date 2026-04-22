@@ -2,32 +2,76 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox xmlns="http://javafx.com/javafx"
+<VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="edu.utsa.cs3443.HomeHaven.controller.DashboardController"
-      prefHeight="400.0" prefWidth="600.0"
-      spacing="20.0"
-      style="-fx-padding: 20;">
+      spacing="25.0"
+      style="-fx-padding: 25;">
 
-    <children>
-        <Label text="Dashboard" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <!-- Title -->
+    <Label text="Dashboard"
+           style="-fx-font-size: 26; -fx-font-weight: bold;"/>
 
-        <GridPane hgap="20.0" vgap="10.0">
-            <children>
-                <Label text="Total Assets:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-                <Label fx:id="lblAssetCount" text="0" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <!-- Stat Cards -->
+    <HBox spacing="25" alignment="CENTER_LEFT">
 
-                <Label text="Due Soon:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-                <Label fx:id="lblDueSoon" text="0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <VBox prefWidth="120"
+              style="-fx-background-color: #f4f4f4;
+                     -fx-padding: 15;
+                     -fx-background-radius: 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
+            <Label text="Total Assets" style="-fx-text-fill: gray;"/>
+            <Label fx:id="lblAssetCount"
+                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+        </VBox>
 
-                <Label text="Overdue:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-                <Label fx:id="lblOverdue" text="0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <VBox prefWidth="120"
+              style="-fx-background-color: #fff3cd;
+                     -fx-padding: 15;
+                     -fx-background-radius: 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
+            <Label text="Due Soon" style="-fx-text-fill: #856404;"/>
+            <Label fx:id="lblDueSoon"
+                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+        </VBox>
 
-                <Label text="Expired Warranties:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-                <Label fx:id="lblExpiredWarranties" text="0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-            </children>
-        </GridPane>
-    </children>
+        <VBox prefWidth="120"
+              style="-fx-background-color: #f8d7da;
+                     -fx-padding: 15;
+                     -fx-background-radius: 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
+            <Label text="Overdue" style="-fx-text-fill: #721c24;"/>
+            <Label fx:id="lblOverdue"
+                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+        </VBox>
+
+        <VBox prefWidth="120"
+              style="-fx-background-color: #d1ecf1;
+                     -fx-padding: 15;
+                     -fx-background-radius: 12;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
+            <Label text="Expired" style="-fx-text-fill: #0c5460;"/>
+            <Label fx:id="lblExpiredWarranties"
+                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+        </VBox>
+
+    </HBox>
+
+    <!-- Section Title -->
+    <Label text="Recent Assets"
+           style="-fx-font-size: 16; -fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets top="10"/>
+        </VBox.margin>
+    </Label>
+
+    <!-- List -->
+    <ListView fx:id="recentList"
+              prefHeight="180.0"
+              style="-fx-background-radius: 12;
+                     -fx-border-radius: 12;
+                     -fx-border-color: #ddd;"/>
 
 </VBox>
