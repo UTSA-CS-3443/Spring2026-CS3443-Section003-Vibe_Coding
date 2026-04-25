@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.utsa.cs3443.homeheaven.HelloController"
+      spacing="20" alignment="CENTER">
+
+    <Label text="HomeHeaven Dashboard" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <Button fx:id="menuButton" text="Go to Reminders" onAction="#openReminders"/>
+
+</VBox>
