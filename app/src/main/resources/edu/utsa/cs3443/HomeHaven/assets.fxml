@@ -13,14 +13,28 @@
     <children>
         <Label text="Assets" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
 
+        <!-- Toolbar -->
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <Button text="+ Add"    onAction="#handleAdd"    fx:id="btnAdd"/>
+            <Button text="✎ Edit"   onAction="#handleEdit"   fx:id="btnEdit"/>
+            <Button text="✖ Remove" onAction="#handleRemove" fx:id="btnRemove"/>
+
+            <!-- Spacer pushes Import to the far right -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="⬆ Import" onAction="#handleImport" fx:id="btnImport"/>
+        </HBox>
+
         <TableView fx:id="tblAssets" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colName" text="Name" prefWidth="130"/>
-                <TableColumn fx:id="colCategory" text="Category" prefWidth="90"/>
-                <TableColumn fx:id="colRoom" text="Room" prefWidth="90"/>
-                <TableColumn fx:id="colStatus" text="Status" prefWidth="110"/>
-                <TableColumn fx:id="colPrice" text="Price" prefWidth="80"/>
+                <TableColumn fx:id="colName"     text="Name"            prefWidth="130"/>
+                <TableColumn fx:id="colCategory" text="Category"        prefWidth="90"/>
+                <TableColumn fx:id="colRoom"     text="Room"            prefWidth="90"/>
+                <TableColumn fx:id="colStatus"   text="Status"          prefWidth="110"/>
+                <TableColumn fx:id="colPrice"    text="Price"           prefWidth="80"/>
                 <TableColumn fx:id="colWarranty" text="Warranty Expiry" prefWidth="100"/>
+                <TableColumn fx:id="colPurchaseDate" text="Purchase Date" prefWidth="110"/>
+                <TableColumn fx:id="colNotes"        text="Notes"         prefWidth="150"/>
             </columns>
         </TableView>
     </children>
