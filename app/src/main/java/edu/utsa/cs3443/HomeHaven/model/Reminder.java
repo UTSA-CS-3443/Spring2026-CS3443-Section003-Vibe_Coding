@@ -10,7 +10,7 @@ public class Reminder {
     private String notes;  
     private boolean done;
 
-    public Reminder(String title, ReminderType type,
+    public Reminder(String title, ReminderType type, //creates a new reminder
                     LocalDate dueDate, String notes) {
         this.title = title;
         this.type = type;
@@ -18,36 +18,28 @@ public class Reminder {
         this.notes = notes;
         this.done = false;
     }
-
-    public String getTitle() {
+    public String getTitle() { //returns title
         return title;
     }
-
-    public ReminderType getType() {
+    public ReminderType getType() { //returns reminder type
         return type;
     }
-
-    public LocalDate getDueDate() {
+    public LocalDate getDueDate() { //return due date
         return dueDate;
     }
-
-    public String getNotes() {
+    public String getNotes() { //returns any notes
         return notes;
     }
-
-    public boolean isDone() {
+    public boolean isDone() { //returns true if reminder is completed
         return done;
     }
-
-    public void setDone(boolean done) {
+    public void setDone(boolean done) { //marks reminder as done or not done
         this.done = done;
     }
-
-    public boolean isOverdue() {
+    public boolean isOverdue() { //returns true if reminder is past due date n not done
         return !done && dueDate.isBefore(LocalDate.now());
     }
-
-    public boolean isDueSoon() {
+    public boolean isDueSoon() { //reteuns true if reminder is due
         if (done) return false;
         LocalDate today = LocalDate.now();
         return !dueDate.isBefore(today) &&
