@@ -4,16 +4,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.time.LocalDate;
 public class DataStore {
-    // 'static' = one shared copy; every controller sees the same data
-    public static ObservableList<Asset> assets =
+    public static ObservableList<Asset> assets = //shared list of all assets in the app
             FXCollections.observableArrayList();
-    public static ObservableList<Reminder> reminders =
+   
+    public static ObservableList<Reminder> reminders = //shared list of all reminders in the app
             FXCollections.observableArrayList();
-
-    // Call once in Main.java before showing the window
-    public static void loadSampleData() {
+  
+    public static void loadSampleData() { //loads sample data
         if (!assets.isEmpty()) return;
-
         assets.addAll(
                 new Asset("Samsung Washer", "Appliance",
                         899.99, LocalDate.of(2022, 3, 15),
@@ -30,32 +28,27 @@ public class DataStore {
                         null, "Garage",
                         AssetStatus.ACTIVE, "No warranty")
         );
-
         reminders.addAll(
-                new Reminder("Replace HVAC filter",
+                new Reminder("Replace HVAC filter", //overdue reminder
                         ReminderType.MAINTENANCE,
                         LocalDate.now().minusDays(5), "Overdue!"),
 
-                new Reminder("Check smoke detectors",
+                new Reminder("Check smoke detectors", //upcoming reminder
                         ReminderType.INSPECTION,
                         LocalDate.now().plusDays(4), "Check all floors"),
 
-                new Reminder("Washer warranty expiry",
+                new Reminder("Washer warranty expiry", //reminder for warranty
                         ReminderType.WARRANTY_EXPIRY,
                         LocalDate.of(2025, 3, 15), "")
         );
     }
-
-    // Add this new helper for the dashboard "due soon" badge
-    public static int getDueSoonCount() {
+    public static int getDueSoonCount() { //counts reminders due within 7 days
         return (int) reminders.stream().filter(Reminder::isDueSoon).count();
     }
-
-    public static int getOverdueCount() {
+    public static int getOverdueCount() { //counts reminders that are overdue
         return (int) reminders.stream().filter(Reminder::isOverdue).count();
     }
-
-    public static int getExpiredWarrantyCount() {
+    public static int getExpiredWarrantyCount() { //counts assets with expired warranties
         return (int) assets.stream().filter(Asset::isWarrantyExpired).count();
     }
 
