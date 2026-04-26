@@ -5,9 +5,9 @@ import java.time.LocalDate;
 public class Reminder {
 
     private String title;
-    private ReminderType type;    // CHANGED: was String, now enum
+    private ReminderType type;    
     private LocalDate dueDate;
-    private String notes;   // NEW from UML
+    private String notes;  
     private boolean done;
 
     public Reminder(String title, ReminderType type,
@@ -47,7 +47,6 @@ public class Reminder {
         return !done && dueDate.isBefore(LocalDate.now());
     }
 
-    // NEW: due within the next 7 days (useful for dashboard warning)
     public boolean isDueSoon() {
         if (done) return false;
         LocalDate today = LocalDate.now();
