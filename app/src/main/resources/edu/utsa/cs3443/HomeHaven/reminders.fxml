@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -13,12 +12,19 @@
     <children>
         <Label text="Reminders" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
 
+        <!-- Toolbar -->
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <Button text="＋ Add"    onAction="#handleAdd"    fx:id="btnAdd"/>
+            <Button text="✎ Edit"   onAction="#handleEdit"   fx:id="btnEdit"/>
+            <Button text="✖ Remove" onAction="#handleRemove" fx:id="btnRemove"/>
+        </HBox>
+
         <TableView fx:id="tblReminders" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colTitle" text="Title" prefWidth="180"/>
-                <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
+                <TableColumn fx:id="colTitle"   text="Title"    prefWidth="180"/>
+                <TableColumn fx:id="colType"    text="Type"     prefWidth="120"/>
                 <TableColumn fx:id="colDueDate" text="Due Date" prefWidth="100"/>
-                <TableColumn fx:id="colStatus" text="Status" prefWidth="100"/>
+                <TableColumn fx:id="colStatus"  text="Status"   prefWidth="100"/>
             </columns>
         </TableView>
     </children>
