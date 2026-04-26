@@ -14,7 +14,7 @@
 
         <!-- Toolbar -->
         <HBox spacing="8" alignment="CENTER_LEFT">
-            <Button text="＋ Add"    onAction="#handleAdd"    fx:id="btnAdd"/>
+            <Button text="+ Add"    onAction="#handleAdd"    fx:id="btnAdd"/>
             <Button text="✎ Edit"   onAction="#handleEdit"   fx:id="btnEdit"/>
             <Button text="✖ Remove" onAction="#handleRemove" fx:id="btnRemove"/>
         </HBox>
