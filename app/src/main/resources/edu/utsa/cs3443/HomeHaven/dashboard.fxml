@@ -1,30 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="edu.utsa.cs3443.HomeHaven.controller.DashboardController"
-      spacing="25.0"
-      style="-fx-padding: 25;">
+<VBox spacing="25.0" style="-fx-padding: 25;"
+      xmlns="http://javafx.com/javafx/25"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="edu.utsa.cs3443.HomeHaven.controller.DashboardController">
 
-    <!-- Title -->
-    <Label text="Dashboard"
-           style="-fx-font-size: 26; -fx-font-weight: bold;"/>
+    <!-- Title + Export Button Row -->
+    <HBox alignment="CENTER_LEFT">
+        <Label style="-fx-font-size: 26; -fx-font-weight: bold;" text="Dashboard"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleDownloadCsv"
+                style="-fx-background-color: #4CAF50;
+                       -fx-text-fill: white;
+                       -fx-font-weight: bold;
+                       -fx-padding: 8 18 8 18;
+                       -fx-background-radius: 8;
+                       -fx-cursor: hand;"
+                text="Download CSV"/>
+    </HBox>
 
     <!-- Stat Cards -->
-    <HBox spacing="25" alignment="CENTER_LEFT">
+    <HBox alignment="CENTER_LEFT" spacing="25">
 
         <VBox prefWidth="120"
               style="-fx-background-color: #f4f4f4;
                      -fx-padding: 15;
                      -fx-background-radius: 12;
                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
-            <Label text="Total Assets" style="-fx-text-fill: gray;"/>
-            <Label fx:id="lblAssetCount"
-                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+            <Label style="-fx-text-fill: gray;" text="Total Assets"/>
+            <Label fx:id="lblAssetCount" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
         </VBox>
 
         <VBox prefWidth="120"
@@ -32,9 +44,8 @@
                      -fx-padding: 15;
                      -fx-background-radius: 12;
                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
-            <Label text="Due Soon" style="-fx-text-fill: #856404;"/>
-            <Label fx:id="lblDueSoon"
-                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+            <Label style="-fx-text-fill: #856404;" text="Due Soon"/>
+            <Label fx:id="lblDueSoon" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
         </VBox>
 
         <VBox prefWidth="120"
@@ -42,9 +53,8 @@
                      -fx-padding: 15;
                      -fx-background-radius: 12;
                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
-            <Label text="Overdue" style="-fx-text-fill: #721c24;"/>
-            <Label fx:id="lblOverdue"
-                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+            <Label style="-fx-text-fill: #721c24;" text="Overdue"/>
+            <Label fx:id="lblOverdue" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
         </VBox>
 
         <VBox prefWidth="120"
@@ -52,24 +62,21 @@
                      -fx-padding: 15;
                      -fx-background-radius: 12;
                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8, 0, 0, 2);">
-            <Label text="Expired" style="-fx-text-fill: #0c5460;"/>
-            <Label fx:id="lblExpiredWarranties"
-                   style="-fx-font-size: 22; -fx-font-weight: bold;"/>
+            <Label style="-fx-text-fill: #0c5460;" text="Expired"/>
+            <Label fx:id="lblExpiredWarranties" style="-fx-font-size: 22; -fx-font-weight: bold;"/>
         </VBox>
 
     </HBox>
 
     <!-- Section Title -->
-    <Label text="Recent Assets"
-           style="-fx-font-size: 16; -fx-font-weight: bold;">
+    <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Recent Assets">
         <VBox.margin>
             <Insets top="10"/>
         </VBox.margin>
     </Label>
 
     <!-- List -->
-    <ListView fx:id="recentList"
-              prefHeight="180.0"
+    <ListView fx:id="recentList" prefHeight="180.0"
               style="-fx-background-radius: 12;
                      -fx-border-radius: 12;
                      -fx-border-color: #ddd;"/>
