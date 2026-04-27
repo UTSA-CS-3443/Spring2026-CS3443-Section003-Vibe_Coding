@@ -113,9 +113,9 @@ public class RemindersController {
         DataStore.assets.forEach(a -> cbAsset.getItems().add(a.getName()));
         cbAsset.setValue(isEdit ? existing.getAssetName() : "");
 
-        TextField tfTitle   = new TextField(isEdit ? existing.getTitle()  : "");
-        TextField tfDueDate = new TextField(isEdit ? existing.getDueDate().toString() : "");
-        TextField tfNotes   = new TextField(isEdit ? existing.getNotes()  : "");
+        TextField tfTitle = new TextField(isEdit ? existing.getTitle() : "");
+        TextField tfNotes = new TextField(isEdit ? existing.getNotes() : "");
+        DatePicker dpDueDate = new DatePicker(isEdit ? existing.getDueDate() : LocalDate.now());
 
         ComboBox<ReminderType> cbType = new ComboBox<>();
         cbType.getItems().addAll(ReminderType.values());
@@ -125,11 +125,11 @@ public class RemindersController {
         CheckBox cbDone = new CheckBox("Mark as done");
         cbDone.setSelected(isEdit && existing.isDone());
 
-        grid.addRow(0, new Label("Asset:"),              cbAsset);
-        grid.addRow(1, new Label("Title:"),              tfTitle);
-        grid.addRow(2, new Label("Type:"),               cbType);
-        grid.addRow(3, new Label("Due Date\n(YYYY-MM-DD):"), tfDueDate);
-        grid.addRow(4, new Label("Notes:"),              tfNotes);
+        grid.addRow(0, new Label("Asset:"),    cbAsset);
+        grid.addRow(1, new Label("Title:"),    tfTitle);
+        grid.addRow(2, new Label("Type:"),     cbType);
+        grid.addRow(3, new Label("Due Date:"), dpDueDate);
+        grid.addRow(4, new Label("Notes:"),    tfNotes);
         if (isEdit)
             grid.addRow(5, new Label(""), cbDone);
 
@@ -147,7 +147,11 @@ public class RemindersController {
         dialog.setResultConverter(btn -> {
             if (btn != ButtonType.OK) return null;
             try {
-                LocalDate dueDate = LocalDate.parse(tfDueDate.getText().trim());
+                LocalDate dueDate = dpDueDate.getValue();
+                if (dueDate == null) {
+                    new Alert(Alert.AlertType.ERROR, "Please select a due date.", ButtonType.OK).showAndWait();
+                    return null;
+                }
                 String assetName = cbAsset.getValue() != null ? cbAsset.getValue().trim() : "";
                 Reminder result = new Reminder(
                         assetName,
@@ -160,8 +164,7 @@ public class RemindersController {
                 if (isEdit) result.setDone(cbDone.isSelected());
                 return result;
             } catch (Exception e) {
-                new Alert(Alert.AlertType.ERROR,
-                        "Invalid date — use YYYY-MM-DD format.", ButtonType.OK)
+                new Alert(Alert.AlertType.ERROR, "Invalid input: " + e.getMessage(), ButtonType.OK)
                         .showAndWait();
                 return null;
             }

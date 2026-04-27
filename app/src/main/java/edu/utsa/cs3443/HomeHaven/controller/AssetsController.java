@@ -42,9 +42,9 @@ public class AssetsController {
                 if (empty || status == null) { setText(null); setStyle(""); return; }
                 setText(status);
                 switch (status) {
-                    case "ACTIVE"             -> setStyle("-fx-text-fill: green;  -fx-font-weight: bold;");
-                    case "NEEDS_MAINTENANCE"  -> setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
-                    case "DISPOSED"           -> setStyle("-fx-text-fill: red;    -fx-font-weight: bold;");
+                    case "Active"             -> setStyle("-fx-text-fill: green;  -fx-font-weight: bold;");
+                    case "Needs Maintenance"  -> setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
+                    case "Disposed"           -> setStyle("-fx-text-fill: red;    -fx-font-weight: bold;");
                     default                   -> setStyle("");
                 }
             }
@@ -128,21 +128,23 @@ public class AssetsController {
         TextField tfCategory = new TextField(isEdit ? existing.getCategory()      : "");
         TextField tfRoom     = new TextField(isEdit ? existing.getRoomLocation()  : "");
         TextField tfPrice    = new TextField(isEdit ? String.valueOf(existing.getPurchasePrice()) : "");
-        TextField tfWarranty = new TextField(isEdit && existing.getWarrantyExpiry() != null
-                ? existing.getWarrantyExpiry().toString() : "");
         TextField tfNotes    = new TextField(isEdit ? existing.getNotes()         : "");
+
+        DatePicker dpPurchaseDate = new DatePicker(isEdit ? existing.getPurchaseDate() : LocalDate.now());
+        DatePicker dpWarranty     = new DatePicker(isEdit ? existing.getWarrantyExpiry() : null);
 
         ComboBox<AssetStatus> cbStatus = new ComboBox<>();
         cbStatus.getItems().addAll(AssetStatus.values());
         cbStatus.setValue(isEdit ? existing.getStatus() : AssetStatus.ACTIVE);
 
-        grid.addRow(0, new Label("Name:"),          tfName);
-        grid.addRow(1, new Label("Category:"),      tfCategory);
-        grid.addRow(2, new Label("Room:"),          tfRoom);
-        grid.addRow(3, new Label("Status:"),        cbStatus);
-        grid.addRow(4, new Label("Price ($):"),     tfPrice);
-        grid.addRow(5, new Label("Warranty Expiry\n(YYYY-MM-DD):"), tfWarranty);
-        grid.addRow(6, new Label("Notes:"),         tfNotes);
+        grid.addRow(0, new Label("Name:"),           tfName);
+        grid.addRow(1, new Label("Category:"),       tfCategory);
+        grid.addRow(2, new Label("Room:"),           tfRoom);
+        grid.addRow(3, new Label("Status:"),         cbStatus);
+        grid.addRow(4, new Label("Price ($):"),      tfPrice);
+        grid.addRow(5, new Label("Purchase Date:"),  dpPurchaseDate);
+        grid.addRow(6, new Label("Warranty Expiry:"), dpWarranty);
+        grid.addRow(7, new Label("Notes:"),          tfNotes);
 
         // ---- wire up the dialog ----
         Dialog<Asset> dialog = new Dialog<>();
@@ -159,16 +161,18 @@ public class AssetsController {
         dialog.setResultConverter(btn -> {
             if (btn != ButtonType.OK) return null;
             try {
+                if (dpPurchaseDate.getValue() == null) {
+                    new Alert(Alert.AlertType.ERROR, "Please select a purchase date.", ButtonType.OK).showAndWait();
+                    return null;
+                }
                 double price = tfPrice.getText().isBlank() ? 0.0
                         : Double.parseDouble(tfPrice.getText());
-                LocalDate warranty = tfWarranty.getText().isBlank() ? null
-                        : LocalDate.parse(tfWarranty.getText());
                 return new Asset(
                         tfName.getText(),
                         tfCategory.getText(),
                         price,
-                        isEdit ? existing.getPurchaseDate() : LocalDate.now(),
-                        warranty,
+                        dpPurchaseDate.getValue(),
+                        dpWarranty.getValue(),
                         tfRoom.getText(),
                         cbStatus.getValue(),
                         tfNotes.getText()
