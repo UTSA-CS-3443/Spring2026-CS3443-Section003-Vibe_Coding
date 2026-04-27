@@ -21,7 +21,8 @@
 
         <TableView fx:id="tblReminders" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colTitle"   text="Title"    prefWidth="180"/>
+                <TableColumn fx:id="colAsset"   text="Asset"    prefWidth="150"/>
+                <TableColumn fx:id="colTitle"   text="Title"    prefWidth="160"/>
                 <TableColumn fx:id="colType"    text="Type"     prefWidth="120"/>
                 <TableColumn fx:id="colDueDate" text="Due Date" prefWidth="100"/>
                 <TableColumn fx:id="colStatus"  text="Status"   prefWidth="100"/>

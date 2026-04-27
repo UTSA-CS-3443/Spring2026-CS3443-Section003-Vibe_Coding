@@ -29,15 +29,15 @@ public class DataStore {
                         AssetStatus.ACTIVE, "No warranty")
         );
         reminders.addAll(
-                new Reminder("Replace HVAC filter", //overdue reminder
+                new Reminder("HVAC Unit", "Replace HVAC filter", //overdue reminder
                         ReminderType.MAINTENANCE,
                         LocalDate.now().minusDays(5), "Overdue!"),
 
-                new Reminder("Check smoke detectors", //upcoming reminder
+                new Reminder("", "Check smoke detectors", //upcoming reminder
                         ReminderType.INSPECTION,
                         LocalDate.now().plusDays(4), "Check all floors"),
 
-                new Reminder("Washer warranty expiry", //reminder for warranty
+                new Reminder("Samsung Washer", "Washer warranty expiry", //reminder for warranty
                         ReminderType.WARRANTY_EXPIRY,
                         LocalDate.of(2025, 3, 15), "")
         );

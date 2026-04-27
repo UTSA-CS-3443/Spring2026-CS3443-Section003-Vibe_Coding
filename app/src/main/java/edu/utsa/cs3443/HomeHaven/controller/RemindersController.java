@@ -15,6 +15,7 @@ import java.util.Optional;
 public class RemindersController {
 
     @FXML private TableView<Reminder> tblReminders;
+    @FXML private TableColumn<Reminder, String> colAsset;
     @FXML private TableColumn<Reminder, String> colTitle;
     @FXML private TableColumn<Reminder, String> colType;
     @FXML private TableColumn<Reminder, String> colDueDate;
@@ -22,6 +23,7 @@ public class RemindersController {
 
     @FXML
     public void initialize() {
+        colAsset.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAssetName()));
         colTitle.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTitle()));
         colType.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getType().toString()));
         colDueDate.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getDueDate().toString()));
@@ -105,6 +107,12 @@ public class RemindersController {
         grid.setVgap(8);
         grid.setStyle("-fx-padding: 10;");
 
+        ComboBox<String> cbAsset = new ComboBox<>();
+        cbAsset.setEditable(true);
+        cbAsset.getItems().add(""); // allow no asset
+        DataStore.assets.forEach(a -> cbAsset.getItems().add(a.getName()));
+        cbAsset.setValue(isEdit ? existing.getAssetName() : "");
+
         TextField tfTitle   = new TextField(isEdit ? existing.getTitle()  : "");
         TextField tfDueDate = new TextField(isEdit ? existing.getDueDate().toString() : "");
         TextField tfNotes   = new TextField(isEdit ? existing.getNotes()  : "");
@@ -117,12 +125,13 @@ public class RemindersController {
         CheckBox cbDone = new CheckBox("Mark as done");
         cbDone.setSelected(isEdit && existing.isDone());
 
-        grid.addRow(0, new Label("Title:"),              tfTitle);
-        grid.addRow(1, new Label("Type:"),               cbType);
-        grid.addRow(2, new Label("Due Date\n(YYYY-MM-DD):"), tfDueDate);
-        grid.addRow(3, new Label("Notes:"),              tfNotes);
+        grid.addRow(0, new Label("Asset:"),              cbAsset);
+        grid.addRow(1, new Label("Title:"),              tfTitle);
+        grid.addRow(2, new Label("Type:"),               cbType);
+        grid.addRow(3, new Label("Due Date\n(YYYY-MM-DD):"), tfDueDate);
+        grid.addRow(4, new Label("Notes:"),              tfNotes);
         if (isEdit)
-            grid.addRow(4, new Label(""), cbDone);
+            grid.addRow(5, new Label(""), cbDone);
 
         Dialog<Reminder> dialog = new Dialog<>();
         dialog.setTitle(isEdit ? "Edit Reminder" : "Add Reminder");
@@ -139,7 +148,9 @@ public class RemindersController {
             if (btn != ButtonType.OK) return null;
             try {
                 LocalDate dueDate = LocalDate.parse(tfDueDate.getText().trim());
+                String assetName = cbAsset.getValue() != null ? cbAsset.getValue().trim() : "";
                 Reminder result = new Reminder(
+                        assetName,
                         tfTitle.getText().trim(),
                         cbType.getValue(),
                         dueDate,
