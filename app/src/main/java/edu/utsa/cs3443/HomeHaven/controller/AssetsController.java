@@ -3,6 +3,9 @@ package edu.utsa.cs3443.HomeHaven.controller;
 import edu.utsa.cs3443.HomeHaven.model.Asset;
 import edu.utsa.cs3443.HomeHaven.model.AssetStatus;
 import edu.utsa.cs3443.HomeHaven.model.DataStore;
+import edu.utsa.cs3443.HomeHaven.model.Reminder;
+import edu.utsa.cs3443.HomeHaven.model.ReminderType;
+import javafx.scene.layout.GridPane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -118,17 +121,16 @@ public class AssetsController {
     private Optional<Asset> showAssetDialog(Asset existing) {
         boolean isEdit = existing != null;
 
-        // ---- build the grid of fields ----
         javafx.scene.layout.GridPane grid = new javafx.scene.layout.GridPane();
         grid.setHgap(10);
         grid.setVgap(8);
         grid.setStyle("-fx-padding: 10;");
 
-        TextField tfName     = new TextField(isEdit ? existing.getName()          : "");
-        TextField tfCategory = new TextField(isEdit ? existing.getCategory()      : "");
-        TextField tfRoom     = new TextField(isEdit ? existing.getRoomLocation()  : "");
+        TextField tfName     = new TextField(isEdit ? existing.getName()         : "");
+        TextField tfCategory = new TextField(isEdit ? existing.getCategory()     : "");
+        TextField tfRoom     = new TextField(isEdit ? existing.getRoomLocation() : "");
         TextField tfPrice    = new TextField(isEdit ? String.valueOf(existing.getPurchasePrice()) : "");
-        TextField tfNotes    = new TextField(isEdit ? existing.getNotes()         : "");
+        TextField tfNotes    = new TextField(isEdit ? existing.getNotes()        : "");
 
         DatePicker dpPurchaseDate = new DatePicker(isEdit ? existing.getPurchaseDate() : LocalDate.now());
         DatePicker dpWarranty     = new DatePicker(isEdit ? existing.getWarrantyExpiry() : null);
@@ -137,23 +139,53 @@ public class AssetsController {
         cbStatus.getItems().addAll(AssetStatus.values());
         cbStatus.setValue(isEdit ? existing.getStatus() : AssetStatus.ACTIVE);
 
-        grid.addRow(0, new Label("Name:"),           tfName);
-        grid.addRow(1, new Label("Category:"),       tfCategory);
-        grid.addRow(2, new Label("Room:"),           tfRoom);
-        grid.addRow(3, new Label("Status:"),         cbStatus);
-        grid.addRow(4, new Label("Price ($):"),      tfPrice);
-        grid.addRow(5, new Label("Purchase Date:"),  dpPurchaseDate);
-        grid.addRow(6, new Label("Warranty Expiry:"), dpWarranty);
-        grid.addRow(7, new Label("Notes:"),          tfNotes);
+        // Warranty reminder checkbox — Add only
+        CheckBox cbWarrantyReminder = new CheckBox("Create warranty expiry reminder");
+        cbWarrantyReminder.setSelected(false);
+        cbWarrantyReminder.setDisable(dpWarranty.getValue() == null);
+        dpWarranty.valueProperty().addListener((obs, oldVal, newVal) -> {
+            cbWarrantyReminder.setDisable(newVal == null);
+            if (newVal == null) cbWarrantyReminder.setSelected(false);
+        });
 
-        // ---- wire up the dialog ----
+        // --- Pending reminders list (Add only) ---
+        // Stores reminders the user has staged before hitting OK
+        List<Reminder> pendingReminders = new ArrayList<>();
+        ListView<String> reminderPreview = new ListView<>();
+        reminderPreview.setPrefHeight(80);
+        reminderPreview.setPlaceholder(new Label("No reminders added yet"));
+
+        Button btnAddReminder = new Button("+ Add Reminder");
+        btnAddReminder.setOnAction(e -> {
+            String assetName = tfName.getText().trim();
+            showAttachedReminderDialog(assetName).ifPresent(r -> {
+                pendingReminders.add(r);
+                reminderPreview.getItems().add(
+                        r.getTitle() + "  |  " + r.getType() + "  |  " + r.getDueDate()
+                );
+            });
+        });
+
+        grid.addRow(0, new Label("Name:"),            tfName);
+        grid.addRow(1, new Label("Category:"),        tfCategory);
+        grid.addRow(2, new Label("Room:"),            tfRoom);
+        grid.addRow(3, new Label("Status:"),          cbStatus);
+        grid.addRow(4, new Label("Price ($):"),       tfPrice);
+        grid.addRow(5, new Label("Purchase Date:"),   dpPurchaseDate);
+        grid.addRow(6, new Label("Warranty Expiry:"), dpWarranty);
+        grid.addRow(7, new Label("Notes:"),           tfNotes);
+        if (!isEdit) {
+            grid.addRow(8,  new Label(""),            cbWarrantyReminder);
+            grid.addRow(9,  new Label("Reminders:"),  btnAddReminder);
+            grid.addRow(10, new Label(""),            reminderPreview);
+        }
+
         Dialog<Asset> dialog = new Dialog<>();
         dialog.setTitle(isEdit ? "Edit Asset" : "Add Asset");
         dialog.setHeaderText(null);
         dialog.getDialogPane().setContent(grid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        // Only enable OK when Name is non-empty
         javafx.scene.Node okBtn = dialog.getDialogPane().lookupButton(ButtonType.OK);
         okBtn.setDisable(tfName.getText().isBlank());
         tfName.textProperty().addListener((obs, o, n) -> okBtn.setDisable(n.isBlank()));
@@ -167,16 +199,33 @@ public class AssetsController {
                 }
                 double price = tfPrice.getText().isBlank() ? 0.0
                         : Double.parseDouble(tfPrice.getText());
-                return new Asset(
-                        tfName.getText(),
-                        tfCategory.getText(),
+
+                Asset result = new Asset(
+                        tfName.getText().trim(),
+                        tfCategory.getText().trim(),
                         price,
                         dpPurchaseDate.getValue(),
                         dpWarranty.getValue(),
-                        tfRoom.getText(),
+                        tfRoom.getText().trim(),
                         cbStatus.getValue(),
-                        tfNotes.getText()
+                        tfNotes.getText().trim()
                 );
+
+                // Auto warranty reminder
+                if (!isEdit && cbWarrantyReminder.isSelected() && dpWarranty.getValue() != null) {
+                    DataStore.reminders.add(new Reminder(
+                            tfName.getText().trim(),
+                            tfName.getText().trim() + " — Warranty Expiry",
+                            ReminderType.WARRANTY_EXPIRY,
+                            dpWarranty.getValue(),
+                            "Auto-generated for asset: " + tfName.getText().trim()
+                    ));
+                }
+
+                // Commit all staged reminders
+                DataStore.reminders.addAll(pendingReminders);
+
+                return result;
             } catch (Exception e) {
                 new Alert(Alert.AlertType.ERROR, "Invalid input: " + e.getMessage()).showAndWait();
                 return null;
@@ -300,4 +349,67 @@ public class AssetsController {
         alert.setHeaderText(null);
         alert.showAndWait();
     }
+
+    // ------------------------------------------------- ATTACHED REMINDER DIALOG
+    /**
+     * A lightweight reminder dialog launched from within the Add Asset dialog.
+     * The asset name is pre-filled and locked so the reminder is always linked
+     * to the asset currently being created.
+     */
+    private Optional<Reminder> showAttachedReminderDialog(String assetName) {
+        javafx.scene.layout.GridPane grid = new javafx.scene.layout.GridPane();
+        grid.setHgap(10);
+        grid.setVgap(8);
+        grid.setStyle("-fx-padding: 10;");
+
+        TextField tfTitle = new TextField();
+        tfTitle.setPromptText("e.g. Schedule inspection");
+
+        // Asset name is pre-filled and locked to the asset being added
+        TextField tfAsset = new TextField(assetName.isBlank() ? "(asset name not entered yet)" : assetName);
+        tfAsset.setEditable(false);
+        tfAsset.setStyle("-fx-background-color: #f0f0f0;");
+
+        ComboBox<ReminderType> cbType = new ComboBox<>();
+        cbType.getItems().addAll(ReminderType.values());
+        cbType.setValue(ReminderType.MAINTENANCE);
+
+        DatePicker dpDueDate = new DatePicker();
+        TextField tfNotes    = new TextField();
+
+        grid.addRow(0, new Label("Reminder Title:"), tfTitle);
+        grid.addRow(1, new Label("Linked Asset:"),   tfAsset);
+        grid.addRow(2, new Label("Type:"),           cbType);
+        grid.addRow(3, new Label("Due Date:"),       dpDueDate);
+        grid.addRow(4, new Label("Notes:"),          tfNotes);
+
+        Dialog<Reminder> dialog = new Dialog<>();
+        dialog.setTitle("Add Reminder for Asset");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // OK disabled until both title and due date are provided
+        javafx.scene.Node okBtn = dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okBtn.setDisable(true);
+        Runnable validate = () -> okBtn.setDisable(
+                tfTitle.getText().isBlank() || dpDueDate.getValue() == null);
+        tfTitle.textProperty().addListener((obs, o, n) -> validate.run());
+        dpDueDate.valueProperty().addListener((obs, o, n) -> validate.run());
+
+        dialog.setResultConverter(btn -> {
+            if (btn != ButtonType.OK) return null;
+            String linkedName = assetName.isBlank() ? "Unknown Asset" : assetName;
+            return new Reminder(
+                    tfTitle.getText().trim(),
+                    linkedName,
+                    cbType.getValue(),
+                    dpDueDate.getValue(),
+                    tfNotes.getText().trim()
+            );
+        });
+
+        return dialog.showAndWait().filter(r -> r != null);
+    }
+
 }
