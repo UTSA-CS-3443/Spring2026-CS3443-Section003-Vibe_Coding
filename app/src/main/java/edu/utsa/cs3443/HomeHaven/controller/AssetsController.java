@@ -108,8 +108,26 @@ public class AssetsController {
         confirm.setTitle("Confirm Removal");
         confirm.setHeaderText(null);
         confirm.showAndWait().ifPresent(btn -> {
-            if (btn == ButtonType.YES)
-                DataStore.assets.remove(selected);
+            if (btn != ButtonType.YES) return;
+            DataStore.assets.remove(selected);
+
+            List<Reminder> linked = new ArrayList<>();
+            for (Reminder r : DataStore.reminders)
+                if (selected.getName().equals(r.getAssetName()))
+                    linked.add(r);
+
+            if (!linked.isEmpty()) {
+                String count = linked.size() == 1 ? "1 reminder" : linked.size() + " reminders";
+                Alert reminderConfirm = new Alert(Alert.AlertType.CONFIRMATION,
+                        "Also delete " + count + " associated with \"" + selected.getName() + "\"?",
+                        ButtonType.YES, ButtonType.NO);
+                reminderConfirm.setTitle("Delete Associated Reminders");
+                reminderConfirm.setHeaderText(null);
+                reminderConfirm.showAndWait().ifPresent(r -> {
+                    if (r == ButtonType.YES)
+                        DataStore.reminders.removeAll(linked);
+                });
+            }
         });
     }
 
