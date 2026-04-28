@@ -51,6 +51,7 @@ public class RemindersController {
             }
         });
 
+        tblReminders.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblReminders.setItems(DataStore.reminders);
     }
 

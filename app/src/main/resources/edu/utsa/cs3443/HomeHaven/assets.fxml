@@ -34,7 +34,6 @@
                 <TableColumn fx:id="colPrice"    text="Price"           prefWidth="80"/>
                 <TableColumn fx:id="colWarranty" text="Warranty Expiry" prefWidth="100"/>
                 <TableColumn fx:id="colPurchaseDate" text="Purchase Date" prefWidth="110"/>
-                <TableColumn fx:id="colNotes"        text="Notes"         prefWidth="150"/>
             </columns>
         </TableView>
     </children>

@@ -29,7 +29,6 @@ public class AssetsController {
     @FXML private TableColumn<Asset, String> colPrice;
     @FXML private TableColumn<Asset, String> colWarranty;
     @FXML private TableColumn<Asset, String> colPurchaseDate;
-    @FXML private TableColumn<Asset, String> colNotes;
 
     @FXML
     public void initialize() {
@@ -68,9 +67,28 @@ public class AssetsController {
             return new SimpleStringProperty(c.getValue().getPurchaseDate().toString());
         });
 
-        colNotes.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getNotes()));
-
+        tblAssets.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tblAssets.setItems(DataStore.assets);
+
+        tblAssets.setRowFactory(tv -> {
+            TableRow<Asset> row = new TableRow<>();
+            MenuItem notesItem = new MenuItem("See Notes");
+            notesItem.setOnAction(e -> {
+                Asset asset = row.getItem();
+                if (asset == null) return;
+                String notes = asset.getNotes();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        (notes == null || notes.isBlank()) ? "No notes for this asset." : notes);
+                alert.setTitle("Notes — " + asset.getName());
+                alert.setHeaderText(null);
+                alert.showAndWait();
+            });
+            ContextMenu menu = new ContextMenu(notesItem);
+            row.setOnContextMenuRequested(e -> {
+                if (!row.isEmpty()) menu.show(row, e.getScreenX(), e.getScreenY());
+            });
+            return row;
+        });
     }
 
     // ------------------------------------------------------------------ ADD
