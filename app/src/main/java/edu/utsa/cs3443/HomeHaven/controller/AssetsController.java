@@ -437,8 +437,8 @@ public class AssetsController {
             if (btn != ButtonType.OK) return null;
             String linkedName = assetName.isBlank() ? "Unknown Asset" : assetName;
             return new Reminder(
-                    tfTitle.getText().trim(),
                     linkedName,
+                    tfTitle.getText().trim(),
                     cbType.getValue(),
                     dpDueDate.getValue(),
                     tfNotes.getText().trim()
