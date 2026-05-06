@@ -99,10 +99,10 @@ Handles screen behavior and user interactions.
 
 ## 👥 Contributors
 
-- Ryan Varghese
-- [Team Member Name]
-- [Team Member Name]
-- [Team Member Name]
+- Ryan Borrego
+- Josue Alan Canales
+- Lawrencia Tiwaa-Adjei
+- Ahaan Vohra
 
 ---
 
