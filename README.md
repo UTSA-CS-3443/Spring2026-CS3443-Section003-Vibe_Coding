@@ -178,6 +178,8 @@ HomeHaven supports CSV import and export functionality for managing household as
 
 A UML diagram illustrating the MVC structure and relationships between project components is included in this repository.
 
+<img width="540" height="1113" alt="image" src="https://github.com/user-attachments/assets/74686aad-8dc7-4c50-a635-02df119962ec" />
+
 ---
 
 # ✅ Testing & Validation
